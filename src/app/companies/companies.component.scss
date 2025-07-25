@@ -1,0 +1,88 @@
+.companies-page {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  h2 {
+    color: #2c3e50;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+  }
+  
+  p {
+    color: #7f8c8d;
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+.add-btn {
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+}
+
+.search-bar {
+  margin-bottom: 2rem;
+  
+  .search-input {
+    width: 300px;
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    
+    &::placeholder {
+      color: #a0a6b1;
+    }
+    
+    &:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+    }
+  }
+  
+  .p-input-icon-left > i {
+    left: 12px;
+    color: #a0a6b1;
+  }
+}
+
+.companies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;
+  grid-auto-rows: 1fr;
+  
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+::ng-deep {
+  .p-button-primary {
+    background-color: #667eea;
+    border-color: #667eea;
+    
+    &:hover {
+      background-color: #5a6fd8;
+      border-color: #5a6fd8;
+    }
+  }
+}

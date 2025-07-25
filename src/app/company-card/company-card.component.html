@@ -1,0 +1,37 @@
+<div class="company-card">
+  <div class="card-header">
+    <h3 class="company-name">{{ company.name }}</h3>
+    <span class="status-badge" [class]="'status-' + company.status.toLowerCase()">
+      {{ company.status }}
+    </span>
+  </div>
+  
+  <div class="card-content">
+    <div class="company-id">
+      <span class="id-text">{{ company.id }}</span>
+    </div>
+    
+    <div class="company-details">
+      <div class="detail-row">
+        <i class="pi pi-building"></i>
+        <span class="detail-value">{{ company.address }}</span>
+      </div>
+    </div>
+    
+    <div class="financial-info">
+      <div class="financial-row">
+        <span class="financial-label">Authorized:</span>
+        <span class="financial-value">{{ company.authorized | currency:'INR':'symbol':'1.0-0' }}</span>
+      </div>
+      <div class="financial-row">
+        <span class="financial-label">Paid Up:</span>
+        <span class="financial-value">{{ company.paidUp | currency:'INR':'symbol':'1.0-0' }}</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="card-actions">
+    <button pButton type="button" icon="pi pi-pencil" label="Edit" class="p-button-sm p-button-outlined action-btn"></button>
+    <button pButton type="button" icon="pi pi-eye" label="Details" class="p-button-sm p-button-outlined action-btn"></button>
+  </div>
+</div>

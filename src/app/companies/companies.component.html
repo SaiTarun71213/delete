@@ -1,0 +1,23 @@
+<div class="companies-page">
+  <div class="page-header">
+    <div class="page-title">
+      <h2>Companies</h2>
+      <p>List of total companies</p>
+    </div>
+    <button pButton type="button" icon="pi pi-plus" label="Add Company" class="p-button-primary add-btn"></button>
+  </div>
+
+  <div class="search-bar">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText placeholder="Search companies..." class="search-input" />
+    </span>
+  </div>
+
+  <div class="companies-grid">
+    <app-company-card 
+      *ngFor="let company of companies" 
+      [company]="company">
+    </app-company-card>
+  </div>
+</div>

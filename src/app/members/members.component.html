@@ -1,0 +1,59 @@
+<div class="members-page">
+  <div class="page-header">
+    <div class="page-title">
+      <h2>Members</h2>
+      <p>Manage members across all companies</p>
+    </div>
+    <button pButton type="button" icon="pi pi-plus" label="Add Member" class="p-button-primary add-btn"></button>
+  </div>
+
+  <div class="search-bar">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText placeholder="Search companies..." class="search-input" />
+    </span>
+  </div>
+
+  <div class="table-container">
+    <p-table [value]="members" styleClass="p-datatable-gridlines">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="name-column">Name</th>
+          <th class="din-column">DIN/Registration</th>
+          <th class="contact-column">Contact</th>
+          <th class="companies-column">Companies Count</th>
+          <th class="actions-column">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-member>
+        <tr>
+          <td class="name-cell">{{ member.name }}</td>
+          <td class="din-cell">{{ member.din }}</td>
+          <td class="contact-cell">
+            <div class="contact-info">
+              <div class="contact-row">
+                <i class="pi pi-envelope contact-icon"></i>
+                <span>{{ member.email }}</span>
+              </div>
+              <div class="contact-row">
+                <i class="pi pi-phone contact-icon"></i>
+                <span>{{ member.phone }}</span>
+              </div>
+            </div>
+          </td>
+          <td class="companies-cell">
+            <span class="companies-count">{{ member.companiesCount }}</span>
+          </td>
+          <td class="actions-cell">
+            <div class="action-buttons">
+              <button pButton type="button" icon="pi pi-pencil" label="Edit" 
+                      class="p-button-sm p-button-outlined action-btn edit-btn"></button>
+              <button pButton type="button" icon="pi pi-eye" label="Details" 
+                      class="p-button-sm p-button-outlined action-btn details-btn"></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
