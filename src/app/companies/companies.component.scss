@@ -18,7 +18,7 @@
     font-weight: 600;
     margin: 0 0 0.5rem 0;
   }
-  
+
   p {
     color: #7f8c8d;
     font-size: 1rem;
@@ -34,25 +34,25 @@
 
 .search-bar {
   margin-bottom: 2rem;
-  
+
   .search-input {
     width: 300px;
     padding: 0.75rem 0.75rem 0.75rem 2.5rem;
     border: 1px solid #e1e5e9;
     border-radius: 6px;
     font-size: 0.9rem;
-    
+
     &::placeholder {
       color: #a0a6b1;
     }
-    
+
     &:focus {
       border-color: #667eea;
       box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
     }
   }
-  
-  .p-input-icon-left > i {
+
+  .p-input-icon-left>i {
     left: 12px;
     color: #a0a6b1;
   }
@@ -64,14 +64,123 @@
   gap: 1.5rem;
   align-items: stretch;
   grid-auto-rows: 1fr;
-  
+
   @media (max-width: 1200px) {
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   }
-  
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 1rem;
+  }
+}
+
+.company-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #3b82f6;
+  }
+
+  ::ng-deep .p-card-body {
+    padding: 1.5rem;
+  }
+
+  ::ng-deep .p-card-content {
+    padding: 0;
+  }
+}
+
+.company-content {
+  .company-header {
+    margin-bottom: 1rem;
+
+    .company-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #111827;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .company-industry {
+      font-size: 0.875rem;
+      color: #3b82f6;
+      background: #eff6ff;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-weight: 500;
+    }
+  }
+
+  .company-details {
+    margin-bottom: 1rem;
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .label {
+        font-size: 0.875rem;
+        color: #6b7280;
+        font-weight: 500;
+      }
+
+      .value {
+        font-size: 0.875rem;
+        color: #111827;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .company-description {
+    font-size: 0.875rem;
+    color: #6b7280;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .company-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    color: #3b82f6;
+    font-size: 0.875rem;
+    font-weight: 500;
+
+    i {
+      font-size: 0.75rem;
+    }
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+
+  h3 {
+    color: #374151;
+    margin: 1rem 0 0.5rem 0;
+  }
+
+  p {
+    color: #6b7280;
+    margin: 0 0 1.5rem 0;
   }
 }
 
@@ -79,7 +188,7 @@
   .p-button-primary {
     background-color: #667eea;
     border-color: #667eea;
-    
+
     &:hover {
       background-color: #5a6fd8;
       border-color: #5a6fd8;

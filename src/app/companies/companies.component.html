@@ -2,22 +2,63 @@
   <div class="page-header">
     <div class="page-title">
       <h2>Companies</h2>
-      <p>List of total companies</p>
+      <p>List of total companies ({{ filteredCompanies.length }})</p>
     </div>
-    <button pButton type="button" icon="pi pi-plus" label="Add Company" class="p-button-primary add-btn"></button>
+    <button pButton type="button" icon="pi pi-plus" label="Add Company" class="p-button-primary add-btn"
+      (click)="onAddCompany()"></button>
   </div>
 
   <div class="search-bar">
     <span class="p-input-icon-left">
       <i class="pi pi-search"></i>
-      <input type="text" pInputText placeholder="Search companies..." class="search-input" />
+      <input type="text" pInputText placeholder="Search companies..." class="search-input" [(ngModel)]="searchQuery"
+        (input)="onSearchChange($event)" />
     </span>
   </div>
 
   <div class="companies-grid">
-    <app-company-card 
-      *ngFor="let company of companies" 
-      [company]="company">
-    </app-company-card>
+    <p-card *ngFor="let company of filteredCompanies" class="company-card" (click)="onCompanyClick(company)">
+      <div class="company-content">
+        <div class="company-header">
+          <h3 class="company-name">{{ company.name }}</h3>
+          <span class="company-industry">{{ company.industry }}</span>
+        </div>
+        <div class="company-details">
+          <div class="detail-item">
+            <span class="label">Registration:</span>
+            <span class="value">{{ company.registrationNumber }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Established:</span>
+            <span class="value">{{ company.establishedDate | date:'yyyy' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Total Shares:</span>
+            <span class="value">{{ company.totalShares | number }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Available:</span>
+            <span class="value">{{ company.availableShares | number }}</span>
+          </div>
+        </div>
+        <div class="company-description">
+          {{ company.description }}
+        </div>
+        <div class="company-actions">
+          <i class="pi pi-arrow-right"></i>
+          <span>View Details</span>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="filteredCompanies.length === 0" class="empty-state">
+    <i class="pi pi-building" style="font-size: 3rem; color: #6b7280;"></i>
+    <h3>No Companies Found</h3>
+    <p *ngIf="searchQuery">No companies match your search criteria.</p>
+    <p *ngIf="!searchQuery">No companies have been added yet.</p>
+    <button pButton type="button" icon="pi pi-plus" label="Add First Company" class="p-button-primary"
+      (click)="onAddCompany()" *ngIf="!searchQuery"></button>
   </div>
 </div>

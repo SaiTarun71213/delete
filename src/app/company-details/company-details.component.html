@@ -1,0 +1,159 @@
+<div class="company-details-container">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <p>Loading company details...</p>
+    </div>
+
+    <!-- Company Details -->
+    <div *ngIf="!loading && company" class="company-content">
+        <!-- Header with Back Button -->
+        <div class="header-section">
+            <p-button icon="pi pi-arrow-left" [text]="true" label="Back to Companies" (onClick)="goBack()"
+                class="back-button">
+            </p-button>
+        </div>
+
+        <!-- Company Information Card -->
+        <p-card class="company-info-card">
+            <div class="company-header">
+                <div class="company-main-info">
+                    <h1 class="company-name">{{ company.name }}</h1>
+                    <p class="company-description">{{ company.description }}</p>
+                    <div class="company-meta">
+                        <span class="meta-item">
+                            <i class="pi pi-building"></i>
+                            {{ company.industry }}
+                        </span>
+                        <span class="meta-item">
+                            <i class="pi pi-calendar"></i>
+                            Est. {{ company.establishedDate | date:'yyyy' }}
+                        </span>
+                        <span class="meta-item">
+                            <i class="pi pi-id-card"></i>
+                            {{ company.registrationNumber }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="company-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">{{ company.totalShares | number }}</div>
+                        <div class="stat-label">Total Shares</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">{{ company.availableShares | number }}</div>
+                        <div class="stat-label">Available</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">{{ shareholders.length }}</div>
+                        <div class="stat-label">Shareholders</div>
+                    </div>
+                </div>
+            </div>
+        </p-card>
+
+        <!-- Shareholders Section -->
+        <p-card class="shareholders-card">
+            <ng-template pTemplate="header">
+                <div class="card-header">
+                    <h2>Shareholders</h2>
+                    <p>Manage shareholdings and perform transfers</p>
+                </div>
+            </ng-template>
+
+            <p-table [value]="shareholders" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} shareholders"
+                styleClass="p-datatable-striped">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Shareholder</th>
+                        <th>Shares</th>
+                        <th>Percentage</th>
+                        <th>Share Type</th>
+                        <th>Acquisition Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-shareholder>
+                    <tr>
+                        <td>
+                            <div class="shareholder-info">
+                                <p-avatar *ngIf="shareholder.user.avatar; else initials"
+                                    [image]="shareholder.user.avatar" size="large" shape="circle">
+                                </p-avatar>
+                                <ng-template #initials>
+                                    <p-avatar [label]="getUserInitials(shareholder.user.name)" size="large"
+                                        shape="circle" [style]="{'background-color': '#3b82f6', 'color': 'white'}">
+                                    </p-avatar>
+                                </ng-template>
+                                <div class="shareholder-details">
+                                    <div class="name">{{ shareholder.user.name }}</div>
+                                    <div class="email">{{ shareholder.user.email }}</div>
+                                    <div class="type">
+                                        <i class="pi"
+                                            [ngClass]="shareholder.user.type === 'person' ? 'pi-user' : 'pi-building'"></i>
+                                        {{ shareholder.user.type | titlecase }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="shares-count">{{ shareholder.shares | number }}</span>
+                        </td>
+                        <td>
+                            <span class="percentage">{{ shareholder.percentage | number:'1.2-2' }}%</span>
+                        </td>
+                        <td>
+                            <p-tag [value]="shareholder.shareType | titlecase"
+                                [severity]="getShareTypeColor(shareholder.shareType)">
+                            </p-tag>
+                        </td>
+                        <td>
+                            <span class="acquisition-date">{{ shareholder.acquisitionDate | date:'mediumDate' }}</span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <p-button icon="pi pi-arrow-right-arrow-left" label="Transfer" size="small"
+                                    [outlined]="true" severity="primary" (onClick)="onTransferShares(shareholder)"
+                                    pTooltip="Transfer shares to another person/organization">
+                                </p-button>
+                                <p-button icon="pi pi-plus" label="Add" size="small" [outlined]="true"
+                                    severity="success" (onClick)="onAddShares(shareholder)"
+                                    pTooltip="Add shares from another person/organization">
+                                </p-button>
+                                <p-button icon="pi pi-gift" label="Allot" size="small" [outlined]="true" severity="info"
+                                    (onClick)="onAllotShares(shareholder)"
+                                    pTooltip="Allot new shares from company reserves">
+                                </p-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            <div class="empty-state">
+                                <i class="pi pi-users" style="font-size: 3rem; color: #6b7280;"></i>
+                                <h3>No Shareholders Found</h3>
+                                <p>This company doesn't have any shareholders yet.</p>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-card>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!loading && !company" class="error-container">
+        <i class="pi pi-exclamation-triangle" style="font-size: 3rem; color: #ef4444;"></i>
+        <h2>Company Not Found</h2>
+        <p>The requested company could not be found.</p>
+        <p-button label="Back to Companies" icon="pi pi-arrow-left" (onClick)="goBack()">
+        </p-button>
+    </div>
+</div>

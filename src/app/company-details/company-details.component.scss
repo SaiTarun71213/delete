@@ -1,0 +1,281 @@
+.company-details-container {
+    padding: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.loading-container,
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    text-align: center;
+    gap: 1rem;
+
+    h2 {
+        color: #374151;
+        margin: 0;
+    }
+
+    p {
+        color: #6b7280;
+        margin: 0;
+    }
+}
+
+.header-section {
+    margin-bottom: 1.5rem;
+
+    .back-button {
+        ::ng-deep .p-button {
+            color: #6b7280;
+
+            &:hover {
+                color: #3b82f6;
+                background-color: #f3f4f6;
+            }
+        }
+    }
+}
+
+.company-info-card {
+    margin-bottom: 2rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+
+    ::ng-deep .p-card-body {
+        padding: 2rem;
+    }
+}
+
+.company-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}
+
+.company-main-info {
+    flex: 1;
+
+    .company-name {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .company-description {
+        font-size: 1rem;
+        color: #6b7280;
+        margin: 0 0 1rem 0;
+        line-height: 1.5;
+    }
+
+    .company-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #374151;
+
+            i {
+                color: #6b7280;
+            }
+        }
+    }
+}
+
+.company-stats {
+    display: flex;
+    gap: 1rem;
+
+    @media (max-width: 768px) {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+.stat-card {
+    text-align: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    min-width: 100px;
+
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #3b82f6;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 500;
+    }
+}
+
+.shareholders-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+
+    ::ng-deep .p-card-header {
+        padding: 1.5rem 1.5rem 0 1.5rem;
+        border-bottom: none;
+    }
+
+    ::ng-deep .p-card-body {
+        padding: 0 1.5rem 1.5rem 1.5rem;
+    }
+
+    .card-header {
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #111827;
+            margin: 0 0 0.25rem 0;
+        }
+
+        p {
+            color: #6b7280;
+            margin: 0;
+            font-size: 0.875rem;
+        }
+    }
+}
+
+.shareholder-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .shareholder-details {
+        .name {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.25rem;
+        }
+
+        .email {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        .type {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+    }
+}
+
+.shares-count {
+    font-weight: 600;
+    color: #111827;
+    font-size: 1rem;
+}
+
+.percentage {
+    font-weight: 600;
+    color: #3b82f6;
+}
+
+.acquisition-date {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    ::ng-deep .p-button {
+        font-size: 0.75rem;
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+.empty-state {
+    padding: 3rem;
+    text-align: center;
+
+    h3 {
+        color: #374151;
+        margin: 1rem 0 0.5rem 0;
+    }
+
+    p {
+        color: #6b7280;
+        margin: 0;
+    }
+}
+
+// Table customizations
+::ng-deep .p-datatable {
+    .p-datatable-header {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        color: #374151;
+    }
+
+    .p-datatable-thead>tr>th {
+        background: #f8f9fa;
+        color: #374151;
+        font-weight: 600;
+        border-color: #e9ecef;
+        padding: 1rem;
+    }
+
+    .p-datatable-tbody>tr>td {
+        padding: 1rem;
+        border-color: #f3f4f6;
+    }
+
+    .p-datatable-tbody>tr:hover {
+        background: #f8f9fa;
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .company-details-container {
+        padding: 1rem;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+
+        ::ng-deep .p-button {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    .company-meta {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+}

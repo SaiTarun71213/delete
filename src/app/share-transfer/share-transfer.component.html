@@ -1,0 +1,281 @@
+<div class="share-transfer-container">
+    <p-card class="share-transfer-card">
+        <!-- Header -->
+        <div class="header-section">
+            <div class="breadcrumb">
+                <span class="breadcrumb-item">{{ companyName }}</span>
+                <i class="pi pi-chevron-right"></i>
+                <span class="breadcrumb-current">{{ getActionTitle() }}</span>
+            </div>
+            <h2 class="title">{{ getActionTitle() }}</h2>
+            <p class="subtitle">{{ getActionDescription() }}</p>
+        </div>
+
+        <!-- FROM Section -->
+        <div class="section" *ngIf="action !== 'allot'">
+            <h3 class="section-title">FROM</h3>
+
+            <!-- Transfer Flow: FROM is pre-filled and disabled -->
+            <div *ngIf="action === 'transfer'" class="from-info">
+                <div class="shareholder-info">
+                    <div class="shareholder-details">
+                        <span class="label">Shareholder</span>
+                        <span class="label company-label">In Company</span>
+                    </div>
+                    <div class="shareholder-values">
+                        <span class="name">{{ fromUserName }}</span>
+                        <span class="company">{{ companyName }}</span>
+                    </div>
+                </div>
+                <div class="shares-info">
+                    <span class="shares-label">Available Shares</span>
+                    <span class="shares-count">{{ availableShares | number }}</span>
+                </div>
+            </div>
+
+            <!-- Add Flow: FROM needs to be selected -->
+            <div *ngIf="action === 'add'" class="from-selection">
+                <div class="source-selection">
+                    <span class="field-label">Select Source User</span>
+                    <p-dropdown [options]="users" [(ngModel)]="selectedSourceUser" optionLabel="name"
+                        placeholder="Choose source user" [filter]="true" filterBy="name,email" class="source-dropdown">
+                        <ng-template pTemplate="selectedItem">
+                            <div *ngIf="selectedSourceUser" class="selected-user">
+                                <span class="user-name">{{ selectedSourceUser.name }}</span>
+                                <span class="user-type">({{ selectedSourceUser.type | titlecase }})</span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="item" let-user>
+                            <div class="user-option">
+                                <div class="user-name">{{ user.name }}</div>
+                                <div class="user-email">{{ user.email }}</div>
+                                <div class="user-type">{{ user.type | titlecase }}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+
+                <div class="source-company" *ngIf="selectedSourceUser">
+                    <span class="field-label">Select Source Company</span>
+                    <p-dropdown [options]="companies" [(ngModel)]="selectedSourceCompany" optionLabel="name"
+                        placeholder="Choose company" [filter]="true" filterBy="name" class="source-dropdown">
+                        <ng-template pTemplate="selectedItem">
+                            <div *ngIf="selectedSourceCompany" class="selected-company">
+                                <span class="company-name">{{ selectedSourceCompany.name }}</span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="item" let-company>
+                            <div class="company-option">
+                                <div class="company-name">{{ company.name }}</div>
+                                <div class="company-industry">{{ company.industry }}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+
+                <div *ngIf="selectedSourceUser && selectedSourceCompany" class="from-info">
+                    <div class="shareholder-info">
+                        <div class="shareholder-details">
+                            <span class="label">Source</span>
+                            <span class="label company-label">From Company</span>
+                        </div>
+                        <div class="shareholder-values">
+                            <span class="name">{{ selectedSourceUser.name }}</span>
+                            <span class="company">{{ selectedSourceCompany.name }}</span>
+                        </div>
+                    </div>
+                    <div class="shares-info">
+                        <span class="shares-label">Available Shares</span>
+                        <span class="shares-count">{{ getMaxAvailableShares() | number }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TO Section -->
+        <div class="section">
+            <h3 class="section-title">TO</h3>
+
+            <!-- Add/Allot Flow: TO is pre-filled and disabled -->
+            <div *ngIf="action === 'add' || action === 'allot'" class="to-info">
+                <div class="recipient-info">
+                    <div class="recipient-details">
+                        <span class="label">Recipient</span>
+                        <span class="label company-label">In Company</span>
+                    </div>
+                    <div class="recipient-values">
+                        <span class="name">{{ toUserName }}</span>
+                        <span class="company">{{ companyName }}</span>
+                    </div>
+                </div>
+                <div class="action-info">
+                    <span class="action-label">{{ action === 'add' ? 'Adding to' : 'Allotting to' }}</span>
+                    <span class="action-description">{{ action === 'add' ? 'Existing shareholder' : 'Company
+                        shareholder' }}</span>
+                </div>
+            </div>
+
+            <!-- Transfer Flow: TO needs to be selected -->
+            <div *ngIf="action === 'transfer'">
+                <!-- Recipient Type Selection -->
+                <div class="recipient-type">
+                    <span class="field-label">Recipient Type</span>
+                    <div class="button-group">
+                        <p-button [outlined]="recipientType !== 'person'" [text]="recipientType !== 'person'"
+                            severity="primary" icon="pi pi-user" label="Person" (onClick)="setRecipientType('person')"
+                            class="type-button">
+                        </p-button>
+                        <p-button [outlined]="recipientType !== 'organization'"
+                            [text]="recipientType !== 'organization'" severity="primary" icon="pi pi-building"
+                            label="Organization" (onClick)="setRecipientType('organization')" class="type-button">
+                        </p-button>
+                    </div>
+                </div>
+
+                <!-- Recipient Search -->
+                <div class="recipient-search">
+                    <span class="field-label">Find or Add Recipient</span>
+                    <p-iconField iconPosition="left">
+                        <p-inputIcon styleClass="pi pi-search"></p-inputIcon>
+                        <input pInputText placeholder="Search by name or email..." [(ngModel)]="searchQuery"
+                            (input)="onSearchChange()" class="search-input">
+                    </p-iconField>
+
+                    <!-- Search Results -->
+                    <div *ngIf="searchQuery && filteredUsers.length > 0 && !selectedRecipient" class="search-results">
+                        <div *ngFor="let user of filteredUsers.slice(0, 5)" class="search-result-item"
+                            (click)="selectRecipient(user)">
+                            <div class="user-info">
+                                <div class="user-name">{{ user.name }}</div>
+                                <div class="user-email">{{ user.email }}</div>
+                            </div>
+                            <div class="user-type">
+                                <i class="pi" [ngClass]="user.type === 'person' ? 'pi-user' : 'pi-building'"></i>
+                                {{ user.type | titlecase }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- No Results Message -->
+                    <div *ngIf="searchQuery && filteredUsers.length === 0 && !selectedRecipient" class="no-results">
+                        <p>No {{ recipientType }}s found matching "{{ searchQuery }}"</p>
+                        <p class="add-new-hint">You can add a new {{ recipientType }} if needed.</p>
+                    </div>
+
+                    <p class="search-hint">If the recipient is not found, you'll be prompted to add them.</p>
+                </div>
+
+                <!-- Selected Recipient Display -->
+                <div *ngIf="selectedRecipient" class="selected-recipient">
+                    <div class="recipient-card">
+                        <div class="recipient-info">
+                            <div class="recipient-details">
+                                <span class="label">Selected Recipient</span>
+                            </div>
+                            <div class="recipient-values">
+                                <span class="name">{{ selectedRecipient.name }}</span>
+                                <span class="email">{{ selectedRecipient.email }}</span>
+                                <span class="type">
+                                    <i class="pi"
+                                        [ngClass]="selectedRecipient.type === 'person' ? 'pi-user' : 'pi-building'"></i>
+                                    {{ selectedRecipient.type | titlecase }}
+                                </span>
+                            </div>
+                            <div class="recipient-actions">
+                                <p-button icon="pi pi-times" [text]="true" size="small" severity="secondary"
+                                    (onClick)="clearRecipientSelection()" pTooltip="Clear selection">
+                                </p-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DETAILS Section -->
+        <div class="section">
+            <h3 class="section-title">DETAILS</h3>
+
+            <div class="details-row">
+                <div class="shares-transfer">
+                    <span class="field-label">
+                        {{ action === 'transfer' ? 'Shares to Transfer' :
+                        action === 'add' ? 'Shares to Add' : 'Shares to Allot' }}
+                    </span>
+                    <input pInputText [placeholder]="'e.g., 500 (Max: ' + getMaxAvailableShares() + ')'"
+                        [(ngModel)]="sharesToTransfer" class="shares-input" type="number"
+                        [max]="getMaxAvailableShares()" min="1" step="1">
+                    <div class="percentage-buttons">
+                        <p-button label="50%" [text]="true" severity="primary" size="small"
+                            (onClick)="setPercentage(50)" class="percentage-btn">
+                        </p-button>
+                        <p-button label="MAX" [text]="true" severity="primary" size="small"
+                            (onClick)="setPercentage(100)" class="percentage-btn">
+                        </p-button>
+                    </div>
+                    <div class="shares-validation" *ngIf="sharesToTransfer">
+                        <span class="validation-text"
+                            [ngClass]="parseNumber(sharesToTransfer) > getMaxAvailableShares() ? 'error' : 'success'">
+                            {{ parseNumber(sharesToTransfer) > getMaxAvailableShares() ?
+                            'Insufficient shares available' :
+                            'Valid amount' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="transfer-date">
+                    <span class="field-label">
+                        {{ action === 'transfer' ? 'Transfer Date' :
+                        action === 'add' ? 'Addition Date' : 'Allotment Date' }}
+                    </span>
+                    <p-calendar [(ngModel)]="transferDate" dateFormat="dd-mm-yy" [showIcon]="true"
+                        [iconDisplay]="'input'" inputId="transaction-date" class="date-input" placeholder="Select date">
+                    </p-calendar>
+                </div>
+            </div>
+
+            <!-- Transaction Summary -->
+            <div class="transaction-summary" *ngIf="sharesToTransfer && parseNumber(sharesToTransfer) > 0">
+                <h4>Transaction Summary</h4>
+                <div class="summary-row">
+                    <span class="summary-label">Action:</span>
+                    <span class="summary-value">{{ getActionTitle() }}</span>
+                </div>
+                <div class="summary-row" *ngIf="action !== 'allot'">
+                    <span class="summary-label">From:</span>
+                    <span class="summary-value">
+                        {{ action === 'transfer' ? fromUserName : selectedSourceUser?.name || 'Not selected' }}
+                        <span *ngIf="action === 'add' && selectedSourceCompany">
+                            ({{ selectedSourceCompany.name }})
+                        </span>
+                    </span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">To:</span>
+                    <span class="summary-value">
+                        {{ action === 'transfer' ? (selectedRecipient?.name || 'Not selected') : toUserName }}
+                        ({{ companyName }})
+                    </span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Shares:</span>
+                    <span class="summary-value">{{ sharesToTransfer | number }}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Date:</span>
+                    <span class="summary-value">{{ transferDate | date:'mediumDate' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions">
+            <p-button label="Cancel" [outlined]="true" severity="secondary" (onClick)="onCancel()" class="cancel-btn"
+                [disabled]="loading">
+            </p-button>
+            <p-button [label]="loading ? 'Processing...' : 'Confirm ' + getActionTitle()" severity="primary"
+                (onClick)="onConfirmTransaction()" class="confirm-btn" [loading]="loading" [disabled]="loading">
+            </p-button>
+        </div>
+    </p-card>
+</div>
